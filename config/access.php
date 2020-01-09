@@ -11,10 +11,10 @@ try {
         $_SERVER['PHP_AUTH_USER'] != $AUTH_USER ||
         $_SERVER['PHP_AUTH_PW']   != $AUTH_PW);
     if ($is_not_authenticated) {
-        http_response_code(200);
         header('HTTP/1.1 401 Authorization Required');
         header('WWW-Authenticate: Basic realm="Access denied"');
         $response = [
+            'code' => 401,
             'status' => 'error',
             'message' => "You don't have access this site"
         ];
@@ -24,6 +24,7 @@ try {
 } catch (\Exception $error) {
     http_response_code(500);
     $response = [
+        'code' => 500,
         'status' => 'error',
         'message' => 'Error when access',
         'error' => $error

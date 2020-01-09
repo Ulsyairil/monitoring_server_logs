@@ -2,7 +2,7 @@
 
 class Response
 {
-    function response($code, $status, $message)
+    function response_message($code, $status, $message)
     {
         http_response_code($code);
         $response = [

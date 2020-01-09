@@ -16,6 +16,7 @@ class Monitoring extends CLI
         $options->registerOption("drop", "Drop table", "d");
         $options->registerOption("save_access", "Save access log to database and delete access log");
         $options->registerOption("show_access", "Show access log on real time");
+        $options->registerOption("serve", "Serve apps");
     }
 
     protected function main(Options $options)
@@ -50,6 +51,8 @@ class Monitoring extends CLI
             } catch (\Exception $error) {
                 $this->info($error->getMessage());
             }
+        } elseif ($options->getOpt('serve')) {
+            exec('php -S localhost:3000');
         } else {
             echo $options->help();
         }
