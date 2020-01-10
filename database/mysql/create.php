@@ -84,7 +84,43 @@ $mysql->create("access_logs", [
         "AUTO_INCREMENT",
         "PRIMARY KEY"
     ],
-    "access_log" => [
+    "stampt" => [
+        "TEXT",
+        "NOT NULL"
+    ],
+    "host" => [
+        "TEXT",
+        "NOT NULL"
+    ],
+    "logname" => [
+        "TEXT",
+        "NOT NULL"
+    ],
+    "user" => [
+        "TEXT",
+        "NOT NULL"
+    ],
+    "time" => [
+        "TEXT",
+        "NOT NULL"
+    ],
+    "request" => [
+        "TEXT",
+        "NOT NULL"
+    ],
+    "status" => [
+        "TEXT",
+        "NOT NULL"
+    ],
+    "respond_bytes" => [
+        "TEXT",
+        "NOT NULL"
+    ],
+    "header_referer" => [
+        "TEXT",
+        "NOT NULL"
+    ],
+    "header_useragent" => [
         "TEXT",
         "NOT NULL"
     ],

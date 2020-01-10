@@ -12,23 +12,31 @@ class CLIAccessLog
         // Get content file
         $path = "c:\\xampp\\apache\\logs\\";
         $filename = $path . "access.log"; // Can get another file, example : error.log
-        $getsize = filesize($filename);
-        if (!$getsize) {
-            throw new Exception("No content inside");
-        }
-        $handle = fopen($filename, 'r');
-        $contents = fread($handle, filesize($filename));
-        fclose($handle);
+        $parser = new \Kassner\LogParser\LogParser();
+        $parser->setFormat("%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-agent}i\"");
+        $lines = file($filename, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 
         // Initialize connection datbase
         $database = new Database();
         $mysql = $database->mysql();
 
-        // Insert access logs
-        $mysql->insert("access_logs", [
-            'access_log' => $contents,
-            'created_at' => date('Y-m-d H:i:s')
-        ]);
+        foreach ($lines as $line) {
+            $entry = $parser->parse($line);
+            // Insert access logs
+            $mysql->insert("access_logs", [
+                "stampt" => $entry->stamp,
+                "host" => $entry->host,
+                "logname" => $entry->logname,
+                "user" => $entry->user,
+                "time" => $entry->time,
+                "request" => $entry->request,
+                "status" => $entry->status,
+                "respond_bytes" => $entry->responseBytes,
+                "header_referer" => $entry->HeaderReferer,
+                "header_useragent" => $entry->HeaderUseragent,
+                'created_at' => date('Y-m-d H:i:s')
+            ]);
+        }
 
         exec('httpd -k stop');
 
@@ -47,10 +55,11 @@ class CLIAccessLog
         exec('httpd -k start');
 
         $response = "Success save access";
-        return $response;
+        return $entry;
     }
 
-    function show() {
+    function show()
+    {
         // Hide all error
         error_reporting(0);
 
@@ -64,7 +73,7 @@ class CLIAccessLog
         $handle = fopen($filename, 'r');
         $contents = fread($handle, filesize($filename));
         fclose($handle);
-        
+
         return $contents;
     }
 }

@@ -19,7 +19,16 @@ class AccessLogService
         if ($count > 0) {
             $data = $mysql->select("access_logs", [
                 "id",
-                "access_log",
+                "stampt",
+                "host",
+                "logname",
+                "user",
+                "time",
+                "request",
+                "status",
+                "respond_bytes",
+                "header_referer",
+                "header_useragent",
                 "created_at"
             ], [
                 "deleted_at" => null
